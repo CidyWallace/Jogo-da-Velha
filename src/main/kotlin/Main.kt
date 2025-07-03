@@ -27,12 +27,12 @@ fun PvsR(matriz: Array<Array<String>>, sc: Scanner, player1: String, player2: St
         if(turno){
             println("Turno x\n")
             play(matriz, sc, player1)
-            win = verifier(matriz, player1)
+            win = checkEndGame(matriz, player1)
             turno = false
         }else{
             println("Turno O\n")
             aiMoveMinimax(matriz, player2)
-            win = verifier(matriz, player2)
+            win = checkEndGame(matriz, player2)
             turno = true
         }
     }
@@ -47,12 +47,12 @@ fun multiplayer(matriz: Array<Array<String>>, sc: Scanner, player1: String, play
         if(turno){
             println("Turno X\n")
             play(matriz, sc, player1)
-            win = verifier(matriz, player1)
+            win = checkEndGame(matriz, player1)
             turno = false
         }else{
             println("Turno O\n")
             play(matriz, sc, player2)
-            win = verifier(matriz, player2)
+            win = checkEndGame(matriz, player2)
             turno = true
         }
     }
@@ -97,36 +97,28 @@ fun showGame(matriz: Array<Array<String>>) {
 }
 
 fun verifier(matriz: Array<Array<String>>, player: String): Boolean{
-    for(i in 0..2){
-
-        for(i in 0..2) {
-            if((0..2).all { matriz[i][it] == player }){
-                showGame(matriz)
-                println("$player Wins")
-                return true
-            }
-            if((0..2).all { matriz[it][i] == player }){
-                showGame(matriz)
-                println("$player Wins")
-                return true
-            }
-        }
-        if((0..2).all { matriz[it][it] == player }){
-            showGame(matriz)
-            println("$player Wins")
-            return true
-        }
-        if((0..2).all { matriz[it][2 - it] == player }){
-            showGame(matriz)
-            println("$player Wins")
-            return true
-        }
-        if(isBoardFull(matriz)){
-            showGame(matriz)
-            println("Empate!")
-            return true
-        }
+    for(i in 0..2) {
+        if((0..2).all { matriz[i][it] == player }) return true
+        if((0..2).all { matriz[it][i] == player }) return true
     }
+    if ((0..2).all { matriz[it][it] == player }) return true
+    if ((0..2).all { matriz[it][2 - it] == player }) return true
+
+    return false
+}
+
+fun checkEndGame(matriz: Array<Array<String>>, player: String): Boolean{
+    if(verifier(matriz, player)){
+        showGame(matriz)
+        println("$player Wins")
+        return true
+    }
+    if(isBoardFull(matriz)){
+        showGame(matriz)
+        println("Empate!")
+        return true
+    }
+
     return false
 }
 
